@@ -23,17 +23,11 @@ This project follows a **microservices pattern** with clear separation of concer
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   API Gateway   │    │   Backend       │
-│   (Vue.js)      │◄──►│   (Kong)        │◄──►│   Services      │
-│   Port: 8080    │    │   Port: 8000    │    │   (Flask)       │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                │
-                                ▼
-                       ┌─────────────────┐
-                       │   Database      │
-                       │   (MySQL)       │
-                       │   Port: 3306    │
-                       └─────────────────┘
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   API Gateway   │    │   Backend       │    │   Database      │
+│   (Vue.js)      │◄──►│   (Kong)        │◄──►│   Services      │◄──►│   (MySQL)       │
+│   Port: 8080    │    │   Port: 8000    │    │   (Flask)       │    │   Port: 3306    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
 ### **Service Breakdown**

@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: peachtree_bank
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+    networks:
+      - backend
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "5001:5000"
+    networks:
+      - backend
+    environment:
+      - SECRET_KEY=my__very_secret_key
+
+  transaction-service:
+    build: ./transaction-service
+    ports:
+      - "5002:5000"
+    depends_on:
+      - mysql
+    networks:
+      - backend
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    networks:
+      - backend
+
+  kong:
+    image: kong:3.5
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+    volumes:
+      - ./kong/kong.yml:/kong/kong.yml
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

@@ -1,0 +1,49 @@
+_format_version: "3.0"
+
+services:
+  - name: auth-service
+    url: http://auth-service:5000
+    routes:
+      - name: auth
+        paths:
+          - /auth
+        strip_path: false
+    plugins:
+      - name: cors
+        config:
+          origins: ['http://localhost:8080']
+          methods: ['GET', 'POST', 'OPTIONS']
+          headers: ['*']
+          exposed_headers: ['*']
+          credentials: true
+
+  - name: transaction-service
+    url: http://transaction-service:5000
+    routes:
+      - name: transactions
+        paths:
+          - /transactions
+        strip_path: false
+    plugins:
+      - name: jwt
+        config:
+          key_claim_name: key
+          secret_is_base64: false
+          claims_to_verify:
+            - exp
+      - name: cors
+        config:
+          origins: ['http://localhost:8080']
+          methods: ['GET', 'POST', 'PUT', 'OPTIONS']
+          headers: ['*']
+          exposed_headers: ['*']
+          credentials: true
+
+consumers:
+  - username: client-app
+
+jwt_secrets:
+  - consumer: client-app
+    key: my-client-key
+    algorithm: HS256
+    secret: my__very_secret_key

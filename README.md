@@ -22,7 +22,6 @@ http://localhost:8080
 This project follows a **microservices pattern** with clear separation of concerns:
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   API Gateway   │    │   Backend       │    │   Database      │
 │   (Vue.js)      │◄──►│   (Kong)        │◄──►│   Services      │◄──►│   (MySQL)       │
